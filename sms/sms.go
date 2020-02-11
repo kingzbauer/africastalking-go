@@ -31,3 +31,30 @@ func SendMessage(cli *client.Client, req *Request) (rep *Response, err error) {
 
 	return
 }
+
+// Service exposes sms based functions
+type Service struct {
+	cli       *client.Client
+	shortCode string
+}
+
+// NewService initialises the sms service
+func NewService(apiKey, username, defaultShortCode string, sandbox bool) *Service {
+	cli := client.New(apiKey, username, sandbox)
+	return &Service{
+		cli:       cli,
+		shortCode: defaultShortCode,
+	}
+}
+
+// Send makes a send api call and returns the response.
+// `to` is an array of phone numbers in the form +2547********
+// `shortCode` overrides the default short code if provided
+func (s *Service) Send(message string, to []string, shortCode string) (rep *Response, err error) {
+	if len(shortCode) == 0 {
+		shortCode = s.shortCode
+	}
+
+	req := NewRequest(message, to, shortCode)
+	return SendMessage(s.cli, req)
+}

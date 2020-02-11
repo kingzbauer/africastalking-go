@@ -18,5 +18,6 @@ Installation
 
 You can use the different service packages by importing them
 
-`go
-import "github.com/kingzbauer/africastalking-go`
+```go
+import "github.com/kingzbauer/africastalking-go/sms"
+```

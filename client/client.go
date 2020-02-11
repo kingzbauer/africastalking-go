@@ -30,8 +30,8 @@ func New(apiKey, username string, sandbox bool) *Client {
 	return &Client{apiKey: apiKey, username: username, httpClient: cli}
 }
 
-// SetHttpClient overrides the default http client
-func (c *Client) SetHttpClient(cli *http.Client) {
+// SetHTTPClient overrides the default http client
+func (c *Client) SetHTTPClient(cli *http.Client) {
 	c.httpClient = cli
 }
 

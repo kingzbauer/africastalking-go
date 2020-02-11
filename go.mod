@@ -1,4 +1,4 @@
-module github.com/kingzbauer/africastalking
+module github.com/kingzbauer/africastalking-go
 
 go 1.13
 

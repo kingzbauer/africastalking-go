@@ -24,12 +24,12 @@ type Request struct {
 	Username             string `form:"username"`
 	To                   string `form:"to"`
 	Message              string `form:"message"`
-	From                 string `form:"from"`
-	BulkSMSMode          int    `form:"bulkSMSMode"`
-	Enqueue              int    `form:"enqueue"`
-	Keyword              string `form:"keyword"`
-	LinkID               string `form:"linkId"`
-	RetryDurationInHours int    `form:"retryDurationInHours"`
+	From                 string `form:"from,omitempty"`
+	BulkSMSMode          int    `form:"bulkSMSMode,omitempty"`
+	Enqueue              int    `form:"enqueue,omitempty"`
+	Keyword              string `form:"keyword,omitempty"`
+	LinkID               string `form:"linkId,omitempty"`
+	RetryDurationInHours int    `form:"retryDurationInHours,omitempty"`
 }
 
 // SetUsername updates the request with the application username
@@ -39,8 +39,10 @@ func (r *Request) SetUsername(username string) {
 
 // Response body of the response, a JSON object
 type Response struct {
-	Message    string
-	Recipients []Recipient
+	SMSMessageData struct {
+		Message    string
+		Recipients []Recipient
+	}
 }
 
 // Recipient recipient contained in the original request data showing the status of the sent message

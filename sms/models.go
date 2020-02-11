@@ -32,6 +32,11 @@ type Request struct {
 	RetryDurationInHours int    `form:"retryDurationInHours"`
 }
 
+// SetUsername updates the request with the application username
+func (r *Request) SetUsername(username string) {
+	r.Username = username
+}
+
 // Response body of the response, a JSON object
 type Response struct {
 	Message    string

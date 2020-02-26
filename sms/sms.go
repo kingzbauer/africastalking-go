@@ -2,10 +2,29 @@ package sms
 
 import (
 	"encoding/json"
+	"io"
+	"io/ioutil"
 	"strings"
 
 	"github.com/kingzbauer/africastalking-go/client"
 )
+
+// ErrJSONDecode thrown when an error is encountered when decoding a payload
+// Include the payload
+type ErrJSONDecode struct {
+	parent  error
+	Payload []byte
+}
+
+// Error implements the error interface
+func (err ErrJSONDecode) Error() string {
+	return err.parent.Error()
+}
+
+// Unwrap for compatibility with errors.Unwrap method
+func (err ErrJSONDecode) Unwrap() error {
+	return err.parent
+}
 
 // NewRequest creates a new request object with the minimal required fields.
 // You can leave `from` as empty string, defaults to AFRICASTKNG
@@ -25,7 +44,21 @@ func SendMessage(cli *client.Client, req *Request) (rep *Response, err error) {
 	}
 
 	rep = &Response{}
-	if err := json.NewDecoder(repBody).Decode(rep); err != nil {
+	bodyContent, err := ioutil.ReadAll(repBody)
+	if err != nil {
+		return nil, err
+	}
+	// Close the body if is supports it
+	if closer, ok := repBody.(io.Closer); ok {
+		closer.Close()
+	}
+
+	if err := json.Unmarshal(bodyContent, rep); err != nil {
+		// Use ErrJSONDecode to provide the caller with the opportunity to inspect the payload
+		err = &ErrJSONDecode{
+			parent:  err,
+			Payload: bodyContent,
+		}
 		return nil, err
 	}
 

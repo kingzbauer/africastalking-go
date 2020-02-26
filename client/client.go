@@ -27,7 +27,7 @@ type Client struct {
 // Sandbox indicates whether the requests will be targeted to the sandbox AT endpoint
 func New(apiKey, username string, sandbox bool) *Client {
 	cli := &http.Client{}
-	return &Client{apiKey: apiKey, username: username, httpClient: cli}
+	return &Client{apiKey: apiKey, username: username, sandbox: sandbox, httpClient: cli}
 }
 
 // SetHTTPClient overrides the default http client
